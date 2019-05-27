@@ -60,7 +60,9 @@
 
 Профиль по умолчанию таков:
 ```python
-def default_profile_map(font, color, size, bold, italic):
+from odt2md.emphasis import MarkdownStyle
+
+def profile(font, color, size, bold, italic):
     '''
     Default transformation from LibreOffice to Markdown style
     '''
@@ -81,6 +83,8 @@ def default_profile_map(font, color, size, bold, italic):
 
     python -m odt2md.odt2md --profile sample_profile.py sample.odt sample.md
 
+Проще всего начать с того, что скопировать профиль по умолчанию в `sample.md` и затем
+отредактировать для получения желаемого эффекта.
 
 ### Просмотр стилей исходного документа
 

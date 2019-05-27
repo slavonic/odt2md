@@ -5,30 +5,44 @@ from odt2md.style import ParaStyle, TextStyle
 from odt2md.util import escape as E
 from odt2md.emphasis import MarkdownStyle
 from odt2md.util import split_into_lines
+from odt2md import res
 
 
-def default_profile_map(font, color, size, bold, italic):
+def read_profile(profile_filename):
     '''
-    Default transformation from LibreOffice to Markdown style
+    Reads profile file from disk.
+
+    Profile is a normal Python source file, that must define a function named
+    `profile`. Function must take the following parameters:
+
+    * `font`
+    * `color`
+    * `size`
+    * `bold`
+    * `italic`
+
+    and return an instance of `odt2md.emphasis.MarkdownStyle`.
     '''
-    bold = (bold == 'bold')
-    italic = (italic == 'italic')
-    kinovar = (color == '#ff0000')
+    g = {}
+    with open(profile_filename) as f:
+        exec(f.read(), g)
+    if 'profile' not in g:
+        raise ValueError(f'profile {profile_filename} is expected to define a function named "profile"')
+    if not callable(g['profile']):
+        raise ValueError(f'name "profile" in {profile_filename} must be a function')
 
-    return MarkdownStyle(
-        bold=bold,
-        italic=italic,
-        kinovar=kinovar,
-        wide=False
-    )
+    return g['profile']
 
-
-class Profile:
-    def __init__(self, styles, profile_map=default_profile_map):
+class Styler:
+    def __init__(self, styles, profile_filename=None):
         self._style_index = {
             s.name: s for s in styles
         }
-        self.profile_map = profile_map
+
+        if profile_filename is None:
+            profile_filename = res('profile.py')
+
+        self.profile_map = read_profile(profile_filename)
 
     def format_block(self, b):
         if type(b) is ImageBlock:
@@ -113,6 +127,14 @@ class Profile:
             text_style.bold,
             text_style.italic
         )
+
+    def format_md(self, blocks):
+        markdown_text = []
+        for b in blocks:
+            for text in self.format_block(b):
+                markdown_text.append(text)
+        return ''.join(markdown_text)
+
 
 
 def normalize_text(text):
