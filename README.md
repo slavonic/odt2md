@@ -12,7 +12,7 @@
 
 Другой вариант установки - для разработчика:
 
-    git clone ??
+    git clone https://github.com/slavonic/odt2md.git
     cd odt2md
     python3.7 -m venv .venv
     . .venv/bin/activate
