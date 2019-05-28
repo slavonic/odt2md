@@ -32,7 +32,10 @@
 
 Чтобы сконвертировать в Markdown документ `sample.odt`, запустите команду `odt2md`:
 
-    python -m odt2md.odt2md sample.odt sample.md
+    python -m odt2md.odt2md sample.odt sample.zip
+
+Результатом работы будет архив `sample.zip`, содержащий основной Markdown файл с именем
+`content.md`, а также картинки в под-директории `Pictures`.
 
 ### Настройка профиля
 Профиль управляет логикой отображения стиля LibreOffice на стиль Markdown.
@@ -81,7 +84,7 @@ def profile(font, color, size, bold, italic):
 Для настройки своего профиля, надо создать файл с определением желаемого преобразования
 и передать его в `odt2md` с помощью ключа `--profile`. Например:
 
-    python -m odt2md.odt2md --profile sample_profile.py sample.odt sample.md
+    python -m odt2md.odt2md --profile sample_profile.py sample.odt sample.zip
 
 Проще всего начать с того, что скопировать профиль по умолчанию в `sample.md` и затем
 отредактировать для получения желаемого эффекта.
