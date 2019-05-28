@@ -6,7 +6,7 @@ from odt2md.util import is_single_letter
 class MarkdownStyle:
     bold:    bool = False # **xxxx**
     italic:  bool = False # *xxxx*
-    kinovar: bool = False # |xxxx|
+    kinovar: bool = False # =xxxx=
     wide:    bool = False # +xxxx+
 
     def __call__(self, text):
@@ -25,10 +25,10 @@ class MarkdownStyle:
             assert words
             if is_single_letter(words[-1]):
                 if len(words) > 1:
-                    yield '|' + ' '.join(words[:-1]) + '| '
+                    yield '=' + ' '.join(words[:-1]) + '= '
                 yield '~' + words[-1]
             else:
-                yield '|' + text + '|'
+                yield '=' + text + '='
         else:
             yield text
 

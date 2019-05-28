@@ -1,5 +1,6 @@
 import zipfile
 import logging
+import os
 import lxml.etree as et
 import lxmlx.event as ev
 from odt2md.style import parse_styles
@@ -13,13 +14,20 @@ def odt2md(odt_name, md_name, profile=None):
         with z.open('content.xml', 'r') as f:
             xml = et.fromstring(f.read())
 
-    blocks = parse_odt(xml)
-    styler = Styler(parse_styles(xml), profile_filename=profile)
-    markdown_text = styler.format_md(blocks)
+        blocks = parse_odt(xml)
+        styler = Styler(parse_styles(xml), profile_filename=profile)
+        markdown_text = styler.format_md(blocks)
 
-    with open(md_name, 'w') as f:
-        f.write(markdown_text)
+        with open(md_name, 'w') as f:
+            f.write(markdown_text)
 
+        outdir = os.path.dirname(md_name)
+        for image in styler.images:  # images were collected during styling
+            with z.open(image, 'r') as f:
+                name = os.path.join(outdir, image)
+                os.makedirs(os.path.dirname(name), exist_ok=True)
+                with open(name, 'wb') as ff:
+                    ff.write(f.read())
 
 def main():
     import argparse
