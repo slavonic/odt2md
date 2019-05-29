@@ -44,9 +44,12 @@ class Styler:
 
         self.profile_map = read_profile(profile_filename)
 
+        self.images = []
+
     def format_block(self, b):
         if type(b) is ImageBlock:
             yield f'![{E(b.name)}]({E(b.href)})\n\n'
+            self.images.append(b.href)
         else:
             assert type(b) is TextBlock
             if b.spans:

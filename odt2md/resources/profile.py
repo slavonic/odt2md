@@ -4,7 +4,7 @@ def profile(font, color, size, bold, italic):
     '''
     Default transformation from LibreOffice to Markdown style
     '''
-    bold = (bold == 'bold') and False
+    bold = (bold == 'bold')
     italic = (italic == 'italic')
     kinovar = (color == '#ff0000')
 

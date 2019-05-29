@@ -104,4 +104,5 @@ ENV/
 .pytest_cache
 .vscode
 *.md
-
+Pictures
+.DS_Store
