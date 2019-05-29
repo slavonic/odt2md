@@ -25,6 +25,7 @@
 
     . .venv/bin/activate
     pip install pytest
+    export PYTHONPATH=.
     pytest .
 
 ## Запуск и работа
