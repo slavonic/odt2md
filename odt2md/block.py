@@ -12,6 +12,11 @@ class ImageBlock:
     href: str
 
 @dataclass
+class InlineImage:
+    name: str
+    href: str
+
+@dataclass
 class Span:
     styles: list
     text: str
@@ -64,6 +69,7 @@ def extract_spans(events, para_style):
             )
             text.clear()
 
+    frameName = None
     for e,p in ev.with_peer(events):
         if e['type'] == ev.ENTER:
             if e['tag'] in _ignore:
@@ -86,12 +92,27 @@ def extract_spans(events, para_style):
                 fnote = parse_footnote(fnote_id, ev.subtree(events))
                 block.footnotes.append(fnote)
                 block.spans.append(FootnoteRef(inline_styles[:], fnote_id, fnote.citation))
+            elif e['tag'] == ns.drawing('frame'):
+                frameName = e['attrib'].get(ns.drawing('name'))
+            elif e['tag'] == ns.drawing('image'):
+                flush()
+                if block.spans:
+                    yield normalize_block(block)
+                block = TextBlock(para_style=para_style)
+
+                href = e['attrib'].get(ns.xlink('href'))
+                yield ImageBlock(name=frameName, href=href)
             else:
                 assert False, e['tag']
         elif e['type'] == ev.EXIT:
             if p['tag'] in _ignore or p['tag'] in (
                 ns.text('line-break'), ns.text('s'), ns.text('tab'), ns.text('note')
             ):
+                continue
+            elif p['tag'] == ns.drawing('frame'):
+                frameName = None
+                continue
+            elif p['tag'] == ns.drawing('image'):
                 continue
             assert p['tag'] == ns.text('span'), p['tag']
             flush()
