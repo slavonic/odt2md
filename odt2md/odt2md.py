@@ -22,10 +22,15 @@ def odt2md(odt_name, zip_name, profile=None):
             with zz.open('content.md', 'w') as f:
                 f.write(markdown_text.encode())
 
+            dedup = set()
             for image in styler.images:  # images were collected during styling
+                if image in dedup:
+                    continue
+                dedup.add(image)
                 with z.open(image, 'r') as f:
                     with zz.open(image, 'w') as ff:
                         ff.write(f.read())
+                logging.info('written image: %s', image)
 
 def main():
     import argparse
