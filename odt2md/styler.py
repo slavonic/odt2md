@@ -34,7 +34,7 @@ def read_profile(profile_filename):
     return g['profile']
 
 class Styler:
-    def __init__(self, styles, profile_filename=None):
+    def __init__(self, styles, profile_filename=None, max_line_width=128):
         self._style_index = {
             s.name: s for s in styles
         }
@@ -45,6 +45,7 @@ class Styler:
         self.profile_map = read_profile(profile_filename)
 
         self.images = []
+        self.max_line_width = max_line_width
 
     def format_block(self, b):
         if type(b) is ImageBlock:
@@ -65,7 +66,7 @@ class Styler:
                         assert False, span
 
                 markdown_text = ''.join(self.format_spans(spans))
-                yield normalize_text(markdown_text) + '\n'
+                yield normalize_text(markdown_text, max_line_width=self.max_line_width) + '\n'
 
                 if b.para_style is not None:
                     para_style = self._as_style(b.para_style)
@@ -140,7 +141,7 @@ class Styler:
 
 
 
-def normalize_text(text):
-    return '\n'.join(split_into_lines(text))
+def normalize_text(text, max_line_width=128):
+    return '\n'.join(split_into_lines(text, max_line_width=max_line_width))
 
 

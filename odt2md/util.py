@@ -11,7 +11,7 @@ class ns(Enum):
     fo     = lambda x: f'{{urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0}}{x}'
 
 
-def split_into_lines(text, max_line_width=100):
+def split_into_lines(text, max_line_width=128):
     text = regex.sub(r'\s+', ' ', text).strip().split()
 
     out = []
