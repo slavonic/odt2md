@@ -42,16 +42,8 @@ class TextBlock:
 
 def parse_blocks(para):
     assert para.tag == ns.text('p'), para.tag
-    frame = para.find('./'+ns.drawing('frame'))
-    if frame is not None:
-        name = frame.get(ns.drawing('name'))
-        href = frame.find('./'+ns.drawing('image')).get(ns.xlink('href'))
-        yield ImageBlock(name=name, href=href)
-        return
-
     para_style = para.attrib[ns.text('style-name')]
     yield from extract_spans(ev.scan(para), para_style)
-
 
 _ignore = {ns.text('p'), ns.text('soft-page-break')}
 
@@ -215,5 +207,5 @@ def merge_aliased_spans(spans, alias):
 def parse_odt(xml):
     body_text = xml.find('.//'+ns.office('body')+'/'+ns.office('text'))
 
-    for para in body_text.findall('./'+ns.text('p')):
+    for para in body_text.findall('.//'+ns.text('p')):
         yield from parse_blocks(para)
