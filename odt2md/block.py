@@ -41,11 +41,11 @@ class TextBlock:
 
 
 def parse_blocks(para):
-    assert para.tag == ns.text('p'), para.tag
+    assert para.tag in (ns.text('p'), ns.text('h')), para.tag
     para_style = para.attrib[ns.text('style-name')]
     yield from extract_spans(ev.scan(para), para_style)
 
-_ignore = {ns.text('p'), ns.text('soft-page-break'), ns.text('toc-mark')}
+_ignore = {ns.text('p'), ns.text('h'), ns.text('soft-page-break'), ns.text('toc-mark')}
 
 def extract_spans(events, para_style):
 
@@ -130,7 +130,7 @@ def parse_footnote(id_, events):
     body = xml.find('./' + ns.text('note-body'))
     assert body is not None
 
-    for para in body.findall('./'+ns.text('p')):
+    for para in locate_blocks(body):
         fnote.body.extend(parse_blocks(para))
 
     return fnote
@@ -206,8 +206,19 @@ def merge_aliased_spans(spans, alias):
     if tomerge:
         yield merge(tomerge)
 
+
+_ignored_blocks = { ns.office('forms'), ns.text('sequence-decls') }
+def locate_blocks(xml):
+    for elt in xml:
+        if elt.tag in (ns.text('h'), ns.text('p')):
+            yield elt
+        elif elt.tag in _ignored_blocks:
+            pass
+        else:
+            assert False, elt.tag
+
 def parse_odt(xml):
     body_text = xml.find('.//'+ns.office('body')+'/'+ns.office('text'))
 
-    for para in body_text.findall('.//'+ns.text('p')):
+    for para in locate_blocks(body_text):
         yield from parse_blocks(para)

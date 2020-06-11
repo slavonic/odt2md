@@ -106,3 +106,4 @@ ENV/
 *.md
 Pictures
 .DS_Store
+tmp
