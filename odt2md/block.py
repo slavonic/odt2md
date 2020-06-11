@@ -45,7 +45,7 @@ def parse_blocks(para):
     para_style = para.attrib[ns.text('style-name')]
     yield from extract_spans(ev.scan(para), para_style)
 
-_ignore = {ns.text('p'), ns.text('soft-page-break')}
+_ignore = {ns.text('p'), ns.text('soft-page-break'), ns.text('toc-mark')}
 
 def extract_spans(events, para_style):
 
@@ -74,7 +74,7 @@ def extract_spans(events, para_style):
             elif e['tag'] == ns.text('line-break'):
                 flush()
                 if block.spans:
-                    yield normalize_block(block)
+                    yield from normalize_block(block)
                 block = TextBlock(para_style=para_style)
             elif e['tag'] in (ns.text('s'), ns.text('tab')):
                 text.append(' ')
@@ -89,7 +89,7 @@ def extract_spans(events, para_style):
             elif e['tag'] == ns.drawing('image'):
                 flush()
                 if block.spans:
-                    yield normalize_block(block)
+                    yield from normalize_block(block)
                 block = TextBlock(para_style=para_style)
 
                 href = e['attrib'].get(ns.xlink('href'))
@@ -114,7 +114,7 @@ def extract_spans(events, para_style):
 
     flush()
     if block.spans:
-        yield normalize_block(block)
+        yield from normalize_block(block)
 
 def parse_footnote(id_, events):
     xml = ev.unscan(
@@ -161,7 +161,7 @@ def normalize_spans(spans):
         spans[-1] = replace(spans[-1], text=spans[-1].text.rstrip())
 
     # remove empty spans
-    spans = [s for s in spans if s is not Span or s.text]
+    spans = [s for s in spans if (type(s) is not Span) or s.text]
 
     prev = None
     for s in spans:
@@ -177,7 +177,9 @@ def normalize_spans(spans):
             yield s
 
 def normalize_block(block):
-    return replace(block, spans=list(normalize_spans(block.spans)))
+    block = replace(block, spans=list(normalize_spans(block.spans)))
+    if block.spans:
+        yield block
 
 def merge_aliased_spans(spans, alias):
 
