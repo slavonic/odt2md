@@ -45,7 +45,14 @@ def parse_blocks(para):
     para_style = para.attrib[ns.text('style-name')]
     yield from extract_spans(ev.scan(para), para_style)
 
-_ignore = {ns.text('p'), ns.text('h'), ns.text('soft-page-break'), ns.text('toc-mark')}
+_ignore = {
+    ns.text('p'),
+    ns.text('h'),
+    ns.text('soft-page-break'),
+    ns.text('toc-mark'),
+    ns.text('bookmark-start'),
+    ns.text('bookmark-end'),
+}
 
 def extract_spans(events, para_style):
 
