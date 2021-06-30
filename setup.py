@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from os import path
 from odt2md import (
     __version__,
@@ -33,9 +33,13 @@ setup(
         'Programming Language :: Python :: 3.7'
     ],
 
-    packages=find_packages(),
+    packages=['odt2md'],
 
     install_requires=['regex', 'lxml', 'lxmlx'],
+
+    package_data={
+        'odt2md': ['resources/profile.py'],
+    },
 
     entry_points={
         'console_scripts': [
