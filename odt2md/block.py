@@ -33,6 +33,10 @@ class FootnoteRef:
     id: str
     citation: str
 
+    @property
+    def text(self):
+        return self.citation
+
 @dataclass
 class TextBlock:
     para_style: str
