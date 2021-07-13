@@ -57,6 +57,7 @@ _ignore = {
     ns.text('bookmark-start'),
     ns.text('bookmark-end'),
     ns.text('bookmark'),
+    ns.text('bookmark-ref'),
 }
 
 def extract_spans(events, para_style):
