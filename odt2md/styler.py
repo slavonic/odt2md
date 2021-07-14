@@ -134,7 +134,14 @@ class Styler:
 
     def format_md(self, blocks):
         markdown_text = []
+        seen_footnote_citations = set()
         for b in blocks:
+            if type(b) is TextBlock:
+                for f in b.footnotes:
+                    if f.citation in seen_footnote_citations:
+                        print(f'WARNING: Duplicate footnote label "{f.citation}". '
+                            'Please disambiguate by using unique footnote labels throughout the document.')
+                    seen_footnote_citations.add(f.citation)
             for text in self.format_block(b):
                 markdown_text.append(text)
         return ''.join(markdown_text)
