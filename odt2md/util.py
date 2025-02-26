@@ -34,7 +34,7 @@ def split_into_lines(text, max_line_width=128):
 
 def escape(text):
     '''
-    \   backslash
+    \\   backslash
     `   backtick
     *   asterisk
     _   underscore

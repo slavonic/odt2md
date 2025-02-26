@@ -108,3 +108,4 @@ Pictures
 .DS_Store
 tmp
 *.zip
+*.whl
