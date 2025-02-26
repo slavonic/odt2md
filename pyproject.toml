@@ -34,7 +34,7 @@ classifiers = [
 ]
 dependencies = [
     "regex",
-    "lxml",
+    "lxml>4.9.1",
     "lxmlx",
 ]
 
