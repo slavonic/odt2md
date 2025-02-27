@@ -38,7 +38,7 @@ def main():
     parser = argparse.ArgumentParser(description='Converts Libre Office ODT file to a ZIP file with CU-flavored Markdown')
 
     parser.add_argument('--verbose', '--v', action='count', default=0, help='Increase verbosity')
-    parser.add_argument('--max_line_width', '-m', default=128, type=int, help='Cosmetic: break lines is longer than this value (default 128)')
+    parser.add_argument('--max_line_len', '-m', default=128, type=int, help='Cosmetic: break lines is longer than this value (default 128)')
     parser.add_argument('--profile', help='Filename of a custom profile')
     parser.add_argument('input', help='Input ODT file')
     parser.add_argument('output', help='Output ZIP file')
