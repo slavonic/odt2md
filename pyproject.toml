@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta" # If not defined, then legacy behavior c
 
 [project]
 name = "odt2md"
-version = "0.1.6"
+version = "0.1.7"
 description = "Tools to convert LibreOffice document to Church-Slavonic Markdown flavor"
 
 readme = "README.md"

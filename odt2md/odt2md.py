@@ -49,7 +49,7 @@ def main():
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
 
-    odt2md(args.input, args.output, profile=args.profile, max_line_width=args.max_line_width)
+    odt2md(args.input, args.output, profile=args.profile, max_line_width=args.max_line_len)
 
 
 if __name__ == '__main__':
